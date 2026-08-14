@@ -82,7 +82,6 @@ pipeline {
                         sh """
                             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${acc_id}.dkr.ecr.us-east-1.amazonaws.com
                             docker build -t ${acc_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:${appVersion} .
-                            docker push ${acc_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:${appVersion}
                         """
                     }
                 }
@@ -107,6 +106,19 @@ pipeline {
 
                     if (dockerfileScan != 0 || imageScan != 0) {
                         error "Trivy found HIGH/CRITICAL issues in Dockerfile and/or OS packages. Failing pipeline."
+                    }
+                }
+            }
+        }
+        stage('ECR Image push') {
+            steps {
+                script {
+                    // in this block we get aws authentication
+                    withAWS(credentials: 'aws-creds', region: 'us-east-1') {
+                        sh """
+                            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${acc_id}.dkr.ecr.us-east-1.amazonaws.com
+                            docker push ${acc_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:${appVersion}
+                        """
                     }
                 }
             }
