@@ -1,13 +1,4 @@
-
 @Library('jenkins-shared-library') _
-
-def configMap = [
-    project: "roboshop",
-    component: "catalogue"
-]  
-testPipeline(configMap)
-
-/* @Library('jenkins-shared-library') _
 
 def configMap = [
     project: "roboshop",
@@ -19,4 +10,3 @@ if (env.BRANCH_NAME.equalsIgnoreCase('main')){
 else {
     nodejsEKSPipeline(configMap)
 }
- */
