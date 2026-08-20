@@ -6,8 +6,8 @@ def configMap = [
 ]
 
 if (env.BRANCH_NAME.equalsIgnoreCase('main')){
-    echo "We will deal later"
+    nodejsEKSMain(configMap)
 }
 else {
-    nodejsEKSPipeline(configMap)
+    nodejsEKSPipeline(configMap)  
 }
